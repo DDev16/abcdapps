@@ -1,0 +1,52 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;  /* Adjust this to your needs */
+    height: 100vh;
+    overflow: auto;
+    background-color: #f9f9f9;  /* Adjust this to your needs */
+    border-left: 1px solid #ddd;  /* Adjust this to your needs */
+    padding: 20px;  /* Adjust this to your needs */
+    z-index: 1;  /* Assuming your navbar has a z-index higher than 1 */
+    transition: width 0.5s ease;  /* Animation */
+}
+
+/* For mobile screens */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 100%;  /* Full screen on small devices */
+    }
+}
+
+  .sidebar a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+  }
+
+
+  .sidebar-toggle-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 60; /* You can adjust this as needed */
+  }
+  
+  .sidebar-toggle-button button {
+    margin: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background: #252525;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  
+  
+  
+  
+
+  

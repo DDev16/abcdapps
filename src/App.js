@@ -10,11 +10,15 @@ import Footer from './components/Footer/Footer.js';
 // import DeployContract from './components/deploy/DeployContract.js';
 import TokenList from './components/Wallet/TokenList.js';
 import MarketList from './components/Marketplace/Listing.js';
+import BatchTransfer from './components/Batch/BatchTransfer';
+import Sidebar from './components/Sidebar/Sidebar.js';
+
 function App() {
   return (
     <Web3Provider>
       <Router>
         <NavBar />
+       
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/mint" element={<Mint />} />
@@ -23,9 +27,12 @@ function App() {
           <Route path="/token-list" element={<TokenList />} />
           <Route path="/marketplace" element={<MarketList />} />
           {/* <Route path="/deploy-contract" element={<DeployContract />} /> */}
-
+          
         </Routes>
       </Router>
+      <Sidebar>
+        <BatchTransfer />
+      </Sidebar>
       <Footer />
     </Web3Provider>
   );

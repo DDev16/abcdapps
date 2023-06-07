@@ -20,6 +20,8 @@ code {
   align-items: center;
   background-color: #333;
   padding: 20px;
+  z-index: 3;  /* Assuming your navbar has a z-index higher than 1 */
+
 }
 
 /* Logo */

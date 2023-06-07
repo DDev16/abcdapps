@@ -7,13 +7,17 @@ import songbirdLogo from '../../assets/songbird-logo.png';
 import flareLogo from '../../assets/flarelogo.png';
 import { FaWallet } from 'react-icons/fa';
 
+
+
 const StyledNav = styled.nav`
+  position: relative;  // Add this line
   background-color: #252525;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
+  z-index: 50;  // This should now take effect
 
   @media (max-width: 768px) {
     flex-direction: column;

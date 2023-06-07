@@ -1,8 +1,10 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { Web3Context } from '../../utils/Web3Provider';
 import './MyToken.css';
-import BatchTransfer from '../Batch/BatchTransfer';
 import brand from '../../assets/logo.png';
+
+
+
 const MyTokens = () => {
   const { web3, contract } = useContext(Web3Context);
   const [tokens, setTokens] = useState([]);
@@ -57,7 +59,6 @@ const metadata = await response.json();
 
   return (
     <div className="my-tokens-container">
-      <BatchTransfer />
       <h2 className="tokens-heading">My Tokens</h2>
       <button className="refresh-button" onClick={fetchTokens}>
         Refresh Tokens
