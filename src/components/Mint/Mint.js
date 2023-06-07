@@ -13,26 +13,21 @@ const Mint = () => {
   const [description, setDescription] = useState('');
   const [uri, setUri] = useState('');
   const [isMinting, setIsMinting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false); // Track upload status
   const [imagePreview, setImagePreview] = useState('');
   const [formError, setFormError] = useState('');
-  const [freeMints, setFreeMints] = useState(0); // Track the number of free mints for the current user
-  const mintingFee = 50; // Specify the minting fee in ether
+  const [freeMints, setFreeMints] = useState(0);
+  const mintingFee = 50;
   const [videoPreview, setVideoPreview] = useState('');
-  const [imageOnly, setImageOnly] = useState(true); // New state variable to control toggle
-  const [nftLink, setNftLink] = useState(''); // new state variable to store the NFT link
-
-
+  const [imageOnly, setImageOnly] = useState(true);
+  const [nftLink, setNftLink] = useState('');
 
   useEffect(() => {
-    // Fetch the number of free mints for the current user
     const fetchFreeMints = async () => {
       try {
         const accounts = await web3.eth.getAccounts();
         const user = accounts[0];
-
-        // Call the contract's function to get the number of free mints for the user
         const numFreeMints = await contract.methods.getRemainingFreeMints(user).call();
-
         setFreeMints(numFreeMints);
       } catch (error) {
         console.error(error);
@@ -42,11 +37,11 @@ const Mint = () => {
     fetchFreeMints();
   }, [web3, contract]);
 
-
   const handleFileUpload = async (e) => {
     try {
       const file = e.target.files[0];
-  
+      setIsUploading(true); // Start uploading
+
       if (imageOnly) {
         setImagePreview(URL.createObjectURL(file));
         const metadata = await client.store({
@@ -55,44 +50,43 @@ const Mint = () => {
           image: new File([file], file.name, { type: file.type }),
         });
         setUri(metadata.url);
-        setNftLink(metadata.url); // set the NFT link
+        setNftLink(metadata.url);
       } else {
         setVideoPreview(URL.createObjectURL(file));
         const metadata = await client.store({
           name: name,
           description: description,
-          image: new File([file], file.name, { type: file.type }), // Pass the video file as image
+          image: new File([file], file.name, { type: file.type }),
         });
         setUri(metadata.url);
         setNftLink(metadata.url);
       }
+
+      setIsUploading(false); // Upload complete
     } catch (error) {
       console.error(error);
       setFormError('An error occurred while uploading the file. Please try again.');
+      setIsUploading(false); // Reset upload status on error
     }
   };
 
   const mintToken = async (e) => {
-    e.preventDefault(); // This will prevent the page from refreshing when the form is submitted.
+    e.preventDefault();
     try {
       setIsMinting(true);
       const accounts = await web3.eth.getAccounts();
       const user = accounts[0];
-  
+
       if (freeMints > 0) {
-        // Mint token for free
         await contract.methods.mint(name, description, uri).send({ from: user });
-  
         setFreeMints((prevFreeMints) => prevFreeMints - 1);
       } else {
-        // Charge the minting fee
         const weiAmount = web3.utils.toWei(mintingFee.toString(), 'ether');
         const transaction = contract.methods.mint(name, description, uri);
         const gas = await transaction.estimateGas({ from: user, value: weiAmount });
-  
         await transaction.send({ from: user, value: weiAmount, gas });
       }
-  
+
       setIsMinting(false);
       setFormError('');
       alert('Token minted successfully!');
@@ -102,51 +96,52 @@ const Mint = () => {
       setFormError('An error occurred while minting the token. Please try again.');
     }
   };
-  
+
   return (
     <div className="background">
-
-    <div className="mint-container">
-      <h1 className="mint-title" aria-label="Mint a new token">
-        Mint Your NFT
-      </h1>
-      <form className="mint-form" onSubmit={mintToken} aria-label="Mint token form">
-        <label htmlFor="name" className="mint-label">
-          Name:
-        </label>
-        <input
-          type="text"
-          id="name"
-          className="mint-input"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          aria-label="Enter token name"
-        />
-        <label htmlFor="description" className="mint-label">
-          Description:
-        </label>
-        <input
-          type="text"
-          id="description"
-          className="mint-input"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          aria-label="Enter token description"
-        />
-       <label htmlFor="file" className="mint-label">{imageOnly ? "Image" : "Video"}:</label>
+      <div className="mint-container">
+        <h1 className="mint-title" aria-label="Mint a new token">
+          Mint Your NFT
+        </h1>
+        <form className="mint-form" onSubmit={mintToken} aria-label="Mint token form">
+          <label htmlFor="name" className="mint-label">
+            Name:
+          </label>
+          <input
+            type="text"
+            id="name"
+            className="mint-input"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            aria-label="Enter token name"
+          />
+          <label htmlFor="description" className="mint-label">
+            Description:
+          </label>
+          <input
+            type="text"
+            id="description"
+            className="mint-input"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            aria-label="Enter token description"
+          />
+          <label htmlFor="file" className="mint-label">
+            {imageOnly ? 'Image' : 'Video'}:
+          </label>
           <input
             type="file"
             id="file"
             className="mint-input"
-            accept={imageOnly ? ".png,.jpg,.gif" : ".mp4"}
+            accept={imageOnly ? '.png,.jpg,.gif' : '.mp4'}
             onChange={handleFileUpload}
             aria-label="Upload file"
           />
-<button type="button" onClick={() => setImageOnly(!imageOnly)}>
-  Switch to {imageOnly ? "Video" : "Image"}
-</button>
+          <button type="button" onClick={() => setImageOnly(!imageOnly)}>
+            Switch to {imageOnly ? 'Video' : 'Image'}
+          </button>
 
           {imagePreview && (
             <div className="image-preview-container">
@@ -159,20 +154,27 @@ const Mint = () => {
             </div>
           )}
 
-        {formError && <div className="form-error">{formError}</div>}
-        <div>
-        <label className="mint-label mint-label-free">Remaining Free Mints: {freeMints}</label>
-        </div>
-        <div className="mint-fee">Minting Fee: {mintingFee} ETH</div>
-        <div>
-      <a href={nftLink} target="_blank" rel="noreferrer">Click here to see your uploaded file</a>
+          
+          {formError && <div className="form-error">{formError}</div>}
+          <div>
+            <label className="mint-label mint-label-free">Remaining Free Mints: {freeMints}</label>
+          </div>
+          <div className="mint-fee">Minting Fee: {mintingFee} ETH</div>
+          
+          {isUploading && <div className="loading-message">Uploading NFT...</div>}
+          {!isUploading && nftLink && <div className="completion-message">NFT is ready to mint.</div>}
+
+          <button
+            type="submit"
+            className="mint-button"
+            disabled={isMinting || isUploading} // Disable mint button while uploading or minting
+            aria-label="Mint token"
+          >
+            {isMinting ? 'Minting...' : 'Mint'}
+          </button>
+        </form>
+      </div>
     </div>
-        <button type="submit" className="mint-button" disabled={isMinting} aria-label="Mint token">
-          {isMinting ? 'Minting...' : 'Mint'}
-        </button>
-      </form>
-      </div>
-      </div>
   );
 };
 

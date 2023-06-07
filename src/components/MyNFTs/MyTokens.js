@@ -28,8 +28,11 @@ const MyTokens = () => {
             .call({ from: account });
   
           const metadataUri = tokenInfo.uri.replace('ipfs://', 'https://cloudflare-ipfs.com/ipfs/');
-          const response = await fetch(metadataUri);
-          const metadata = await response.json();
+          // Inside the fetchTokens function
+const response = await fetch(metadataUri);
+console.log('Response:', response);
+const metadata = await response.json();
+
   
           if (!metadata.image) {
             console.error(`Metadata image does not exist for token ID ${tokenId}`);
