@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { Web3Context } from '../../utils/Web3Provider';
-import './MyToken.css';
+import '../../components/MyNFTs/MyToken.css';
 import brand from '../../assets/logo.png';
 
 
@@ -9,7 +9,17 @@ const MyTokens = () => {
   const { web3, contract } = useContext(Web3Context);
   const [tokens, setTokens] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const videoRef = useRef();
 
+  const handleVideoClick = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  };
   const isImageFile = (url) => {
     const extension = url.split('.').pop().toLowerCase();
     return extension !== 'mp4';
@@ -28,26 +38,23 @@ const MyTokens = () => {
           const tokenInfo = await contract.methods
             .getTokenInfo(tokenId)
             .call({ from: account });
-  
+      
           const metadataUri = tokenInfo.uri.replace('ipfs://', 'https://cloudflare-ipfs.com/ipfs/');
-          // Inside the fetchTokens function
-const response = await fetch(metadataUri);
-console.log('Response:', response);
-const metadata = await response.json();
-
-  
+          const response = await fetch(metadataUri);
+          const metadata = await response.json();
+      
           if (!metadata.image) {
             console.error(`Metadata image does not exist for token ID ${tokenId}`);
             return null;
           }
-  
+      
           const imageUrl = `https://cloudflare-ipfs.com/ipfs/${metadata.image.replace('ipfs://', '')}`;
           const { name, description } = metadata;
-  
-          return { id: tokenId, imageUrl, name, description, ...tokenInfo };
+      
+          return { id: tokenId, imageUrl, name, description, contractAddress: contract.options.address, ...tokenInfo };
         })
       );
-  
+      
       setTokens(tokensData.filter(token => token !== null));
       setIsLoading(false); // Set loading state to false after tokens are fetched
     }
@@ -60,9 +67,14 @@ const metadata = await response.json();
   return (
     <div className="my-tokens-container">
       <h2 className="tokens-heading">My Tokens</h2>
-      <button className="refresh-button" onClick={fetchTokens}>
-        Refresh Tokens
-      </button>
+      <button
+  className={`refresh-button ${isLoading ? 'refresh-button-disabled' : ''}`}
+  onClick={fetchTokens}
+  onError={(e) => console.error(e)}
+>
+  Refresh Tokens
+</button>
+
       <div className="token-list">
         {isLoading ? (
           <div className="loading-container">
@@ -76,11 +88,19 @@ const metadata = await response.json();
               {isImageFile(token.imageUrl) ? (
                 <img src={token.imageUrl} alt={token.name} className="token-image" />
               ) : (
-                <video src={token.imageUrl} alt={token.name} className="token-video" controls />
+                <video 
+                  ref={videoRef}
+                  src={token.imageUrl} 
+                  alt={token.name} 
+                  className="token-video" 
+                  onClick={handleVideoClick} 
+                  controls
+                />
               )}
               <div className="token-info">
                 <p className="token-name">{token.name}</p>
                 <p className="token-description">{token.description}</p>
+                <p className="contract-address"> Contract Address: {token.contractAddress}</p>
               </div>
             </div>
           ))

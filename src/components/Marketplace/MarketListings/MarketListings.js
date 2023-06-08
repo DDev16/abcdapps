@@ -31,21 +31,20 @@ const IPFS_GATEWAYS = [
   // add more gateways if you want
 ];
 
-async function fetchImageFromIpfs(ipfsHash) {
-  let error;
-  for (let gateway of IPFS_GATEWAYS) {
-    const url = `${gateway}${ipfsHash}`;
-    try {
-      const response = await fetch(url);
-      if (response.ok) {
-        const blob = await response.blob();
-        return URL.createObjectURL(blob);
-      }
-    } catch (err) {
-      error = err;
+async function fetchImageFromIpfs(url) {
+  // Replace the Pinata gateway URL with the ipfs.io gateway
+  url = url.replace('https://gateway.pinata.cloud/ipfs/', 'https://ipfs.io/ipfs/');
+  
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      const blob = await response.blob();
+      return URL.createObjectURL(blob);
     }
+  } catch (error) {
+    console.error(`Error fetching from gateway ${url}:`, error);
   }
-  console.error(`Error fetching from all gateways for ${ipfsHash}:`, error);
+  
   throw new Error('All IPFS gateways failed');
 }
 
@@ -108,7 +107,7 @@ const MarketListings = () => {
               } else if (metadata.image.startsWith('ipfs://')) {
                 const ipfsHash = metadata.image.replace('ipfs://', '');
                 try {
-                  imageUrl = await fetchImageFromIpfs(ipfsHash);
+                  imageUrl = await fetchImageFromIpfs(`https://ipfs.io/ipfs/${ipfsHash}`);
                 } catch (error) {
                   console.error('All IPFS gateways failed for token ID ' + token.tokenId, error);
                   setFailedImages(failedImages => [...failedImages, token.tokenId]);
@@ -117,7 +116,7 @@ const MarketListings = () => {
                 
               } else if (metadata.image.startsWith('https://')) {
                 try {
-                  imageUrl = await fetchImageFromIpfs(metadata.image.replace('https://ipfs.io/ipfs/', ''));
+                  imageUrl = await fetchImageFromIpfs(metadata.image);
                 } catch (error) {
                   console.error('Failed to fetch image for token ID ' + token.tokenId, error);
                   return null;

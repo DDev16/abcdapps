@@ -30,7 +30,7 @@ function App() {
           
         </Routes>
       </Router>
-      <Sidebar>
+       <Sidebar>
         <BatchTransfer />
       </Sidebar>
       <Footer />

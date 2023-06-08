@@ -23,6 +23,12 @@
   color: #61dafb;
 }
 
+.refresh-button-disabled {
+  pointer-events: none; /* Disable pointer events */
+  opacity: 0.5; /* Reduce opacity to indicate disabled state */
+}
+
+
 .refresh-button {
   padding: 12px 24px;
   background-color: #61dafb;
