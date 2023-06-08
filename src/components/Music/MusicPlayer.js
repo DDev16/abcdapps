@@ -35,25 +35,30 @@ export default function MusicPlayer() {
           </div>
         ))}
       </div>
-      <AudioPlayer
-        autoPlayAfterSrcChange={false}
-        src={songs[currentSongIndex].src}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-        customProgressBarSection={[RHAP_UI.PROGRESS_BAR]}
-        customControlsSection={[
-          RHAP_UI.MAIN_CONTROLS,
-          RHAP_UI.CURRENT_TIME,
-          RHAP_UI.DURATION,
-          RHAP_UI.VOLUME_CONTROLS
-        ]}
-        customIcons={{
-          play: isPlaying ? <FaPause /> : <FaPlay />,
-          loading: <FaSpinner />
-        }}
-        onCanPlay={() => setIsLoading(false)}
-        onAbort={() => setIsLoading(true)}
-      />
+      <div className="audio-player">
+        <AudioPlayer
+          autoPlayAfterSrcChange={false}
+          src={songs[currentSongIndex].src}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          customProgressBarSection={[RHAP_UI.PROGRESS_BAR]}
+          customControlsSection={[
+            RHAP_UI.MAIN_CONTROLS,
+            <div className="rhap_time">
+              <div className="rhap_current-time">{isLoading ? 'Loading...' : <span>{new Date().toISOString().substr(14, 5)}</span>}</div>
+              <div className="rhap_duration">{isLoading ? 'Loading...' : <span>{new Date().toISOString().substr(14, 5)}</span>}</div>
+            </div>,
+            RHAP_UI.VOLUME_CONTROLS
+          ]}
+          customIcons={{
+            play: isPlaying ? <FaPause /> : <FaPlay />,
+            loading: <FaSpinner />
+          }}
+          onCanPlay={() => setIsLoading(false)}
+          onAbort={() => setIsLoading(true)}
+        />
+      </div>
     </div>
   );
 }
+

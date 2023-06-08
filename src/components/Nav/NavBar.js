@@ -6,7 +6,6 @@ import { FaWallet } from 'react-icons/fa';
 import { Web3Context } from '../../utils/Web3Provider.js';
 import songbirdLogo from '../../assets/songbird-logo.png';
 import flareLogo from '../../assets/flarelogo.png';
-import MusicPlayer from '../Music/MusicPlayer.js';
 import '../../index.css';
 
 const StyledNav = styled.nav`
@@ -219,7 +218,6 @@ const NavBar = () => {
           </li>
         )}
       </NavLinks>
-      <MusicPlayer />
       <NetworkSelect value={currentNetworkId} onChange={handleNetworkChange}>
         <option value="19">Songbird</option>
         <option value="14">Flare</option>

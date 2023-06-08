@@ -12,6 +12,7 @@ import TokenList from './components/Wallet/TokenList.js';
 import MarketList from './components/Marketplace/Listing.js';
 import BatchTransfer from './components/Batch/BatchTransfer';
 import Sidebar from './components/Sidebar/Sidebar.js';
+import MusicPlayer from './components/Music/MusicPlayer';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         </Routes>
       </Router>
        <Sidebar>
+        <MusicPlayer />
         <BatchTransfer />
       </Sidebar>
       <Footer />
