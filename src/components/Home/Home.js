@@ -2,20 +2,24 @@ import React from 'react';
 import brand from '../../assets/logo.png';
 import '../../index.css';
 import MarketListings from '../Marketplace/MarketListings/MarketListings';
-
+import Hero from '../Hero/Hero';
 
 const Home = () => {
   return (
+    
     <div style={styles.container}>
-      <img src={brand} alt="Logo" style={{ ...styles.logo, ...styles.spinAnimation }} />
-      <h1 style={styles.heading}>Welcome to the SGB/FLR Community Lazy Minting Dapp!</h1>
-      <p style={styles.description}>Create unique and vibrant NFTs without any coding knowledge. Unleash the power of your creativity and let it shine in the digital world!</p>
-      <p style={styles.description}>Our Dapp is more than a tool; it's a creative partner designed meticulously with you in mind. We've integrated state-of-the-art features to make the process of minting NFTs as seamless as possible. Whether you're an artist, a collector, or a digital explorer, we've got you covered.</p>
-      <p style={styles.description}>Born out of a deep-seated love and respect for the Songbird/Flare Networks community, this platform serves as a bridge between your artistic vision and the world. We are here to empower you and provide the necessary tools to help you thrive in the flourishing NFT space.</p>
+            <Hero />
 
-      <p style={{ ...styles.descriptionText, ...styles.fireAnimation }}>Get your 2 Free mints here!!</p>
+      <img src={brand} alt="Logo" style={{ ...styles.logo, ...styles.spinAnimation }} />
+      <h1 style={styles.heading}>Empowering Innovation: Building Robust Dapps for the Community</h1>
+<p style={styles.description}>In the era of digital renaissance, we are dedicated to fostering innovation and pushing the boundaries of what's possible. Welcome to our platform, an all-encompassing hub for decentralized applications (Dapps) meticulously designed for the thriving EVM (Ethereum Virtual Machine) community.</p>
+<p style={styles.description}>We offer you the opportunity to create unique, vibrant NFTs without any prior coding knowledge. Our tools are not just about technological prowess, they are about unlocking your creative potential and letting it shine in the vast expanse of the digital world.</p>
+<p style={styles.description}>Our platform is more than a Dapp, it's a creative companion meticulously curated for you. We've seamlessly integrated cutting-edge features to simplify the process of minting NFTs and interacting with them. Whether you are an artist, a collector, or a digital enthusiast seeking to explore the transformative blockchain landscape, our platform has been designed with you in mind.</p>
+<p style={styles.description}>Our genesis is rooted in the profound respect for the Songbird/Flare Networks community. Our platform serves as a conduit, bridging the gap between your artistic vision and the global audience. We are not just a toolset, but a catalyst that fosters creativity and propels innovation in the thriving NFT marketplace.</p>
+<p style={styles.description}>In an ever-evolving blockchain world, we are committed to consistently pushing the boundaries of what Dapps can achieve on the EVM. With a fervent commitment to continuous growth and evolution, we aspire to explore uncharted territories and redefine the standards of building on the EVM.</p>
+<p style={{ ...styles.descriptionText, ...styles.fireAnimation }}>Jumpstart your digital art journey with us! Enjoy 2 Free mints on us!</p>
       <button style={{ ...styles.button, ...styles.popButton }}>
-        <a href="/mint" style={styles.buttonLink}>Click here to mint</a>
+        <a href="/mint" style={styles.buttonLink}>Begin your creative expedition here</a>
       </button>
       {/* Add more information or features of the dapp */}
   <MarketListings />
@@ -80,9 +84,11 @@ const styles = {
     animation: 'popText 0.5s infinite alternate',
   },
   button: {
-    padding: '0',
+    padding: '10px',
     border: 'none',
     backgroundColor: 'transparent',
+    cursor: 'pointer',
+    marginBottom: '32px',
   },
   buttonLink: {
     display: 'inline-block',

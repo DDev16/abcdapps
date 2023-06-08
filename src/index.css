@@ -13,48 +13,104 @@ code {
 }
 
 
-/* Navbar container */
+/* Navbar Styles */
 .navbar {
+  position: relative;
+  background-color: #252525;
+  color: #ffffff;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background-color: #333;
+  justify-content: space-between;
   padding: 20px;
-  z-index: 3;  /* Assuming your navbar has a z-index higher than 1 */
-
+  z-index: 50;
 }
 
-/* Logo */
-.logo-img {
-  width: 40px;
-  height: 40px;
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 10px;
+  }
 }
 
-.app-name {
-  color: #fff;
-  font-size: 20px;
-  margin-left: 10px;
+.navbar-logo {
+  display: flex;
+  align-items: center;
 }
 
-/* Navigation links */
-.nav-links {
+.navbar-logo img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.navbar-logo .app-name {
+  font-weight: 600;
+}
+
+.navbar-links {
   display: flex;
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
-.nav-link {
-  color: #fff;
-  font-size: 16px;
+.navbar-links li {
+  margin-right: 15px;
+}
+
+.navbar-links a {
+  color: #ffffff;
   text-decoration: none;
-  margin-left: 20px;
-  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
 }
 
-.nav-link:hover {
-  color: #ccc;
+.navbar-links a .nav-icon {
+  margin-right: 5px;
+  color: #ffffff;
 }
+
+.navbar-links a:hover {
+  color: #ffcc00;
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    flex-direction: column;
+    margin-top: 10px;
+  }
+
+  .navbar-links li {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+.network-select {
+  color: #ffffff;
+  background-color: #252525;
+  border: none;
+  margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.network-select:hover {
+  background-color: #333333;
+}
+
+.network-select:focus {
+  background-color: #444444;
+}
+
+.logo-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
 
 
 @keyframes spin {
@@ -70,3 +126,5 @@ code {
   75% {color: #FFD700;}
   100% {color: #FF4500;}
 }
+
+

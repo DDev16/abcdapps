@@ -2,22 +2,25 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FiHome, FiPlusCircle, FiFolder } from 'react-icons/fi';
+import { FaWallet } from 'react-icons/fa';
 import { Web3Context } from '../../utils/Web3Provider.js';
 import songbirdLogo from '../../assets/songbird-logo.png';
 import flareLogo from '../../assets/flarelogo.png';
-import { FaWallet } from 'react-icons/fa';
-
-
+import MusicPlayer from '../Music/MusicPlayer.js';
+import '../../index.css';
 
 const StyledNav = styled.nav`
-  position: relative;  // Add this line
+  position: relative;
   background-color: #252525;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  z-index: 50;  // This should now take effect
+  z-index: 50;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  font-family: 'Roboto', sans-serif;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -28,15 +31,21 @@ const StyledNav = styled.nav`
 const Logo = styled.div`
   display: flex;
   align-items: center;
+  font-size: 24px;
+  font-weight: 700;
 
   img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     margin-right: 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
   }
 
   .app-name {
-    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 1px;
   }
 `;
 
@@ -45,7 +54,7 @@ const NavLinks = styled.ul`
   list-style: none;
 
   li {
-    margin-right: 15px;
+    margin-right: 20px;
   }
 
   a {
@@ -53,6 +62,8 @@ const NavLinks = styled.ul`
     text-decoration: none;
     display: flex;
     align-items: center;
+    font-size: 18px;
+    transition: color 0.3s ease;
 
     .nav-icon {
       margin-right: 5px;
@@ -96,10 +107,18 @@ const NetworkSelect = styled.select`
 `;
 
 const LogoImage = styled.img`
-  width: 50px;
-  height: 50px;
-  margin-right: 5px;
-  vertical-align: middle;
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const NavBar = () => {
@@ -121,7 +140,7 @@ const NavBar = () => {
         } else if (networkId === 14) {
           setSelectedNetwork(flareLogo);
         } else if (networkId === 31337) {
-          setSelectedNetwork(null); 
+          setSelectedNetwork(null);
         }
       } catch (error) {
         console.error(error);
@@ -140,7 +159,7 @@ const NavBar = () => {
           } else if (networkId === 14) {
             setSelectedNetwork(flareLogo);
           } else if (networkId === 31337) {
-            setSelectedNetwork(null); 
+            setSelectedNetwork(null);
           }
 
           const accounts = await web3.eth.getAccounts();
@@ -150,15 +169,15 @@ const NavBar = () => {
         }
       }
     };
-  
+
     getCurrentNetworkId();
   }, [web3]);
 
   return (
     <StyledNav>
       <Logo>
-        <img src="./logo.png" alt="Logo" />
-        <span className="app-name">Flare Community Lazy Minting</span>
+        <img src={require('../../assets/logo.png')} alt="Logo" />
+        <span className="app-name">Flare Fire Blockchain Tools</span>
       </Logo>
       <NavLinks>
         <li>
@@ -185,7 +204,6 @@ const NavBar = () => {
             My NFTs
           </Link>
         </li>
-      
         <li>
           <Link to="/marketplace">
             <FaWallet className="nav-icon" />
@@ -194,13 +212,14 @@ const NavBar = () => {
         </li>
         {account && (
           <li>
-  <Link to="/token-list">
-                <FaWallet className="nav-icon" />
+            <Link to="/token-list">
+              <FaWallet className="nav-icon" />
               Connected Wallet: {account}
             </Link>
           </li>
         )}
       </NavLinks>
+      <MusicPlayer />
       <NetworkSelect value={currentNetworkId} onChange={handleNetworkChange}>
         <option value="19">Songbird</option>
         <option value="14">Flare</option>
