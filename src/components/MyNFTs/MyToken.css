@@ -176,3 +176,23 @@
   font-size: 14px;
   color: #888888;
 }
+
+
+@media screen and (max-width: 768px) {
+  .token-list {
+    grid-template-columns: 1fr; /* Set the grid to a single column */
+  }
+
+  .token-card {
+    width: 100%; /* Expand the card to the full width of the container */
+    padding: 24px;
+  }
+
+  .token-name {
+    font-size: 16px; /* Decrease the font size for the token name */
+  }
+
+  .token-description {
+    font-size: 12px; /* Decrease the font size for the token description */
+  }
+}

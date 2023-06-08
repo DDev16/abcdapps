@@ -34,10 +34,12 @@ function NFTCard({ nft }) {
     };
   
     fetchImageData();
-  }, [nft.uri]);
+  }, [nft.uri, nft.type]);
 
   return (
     <div className="nft-card">
+      <img src={`data:image/png;base64,${imageData}`} alt="NFT" />
+
       <h3 className="nft-name">{nft.name}</h3>
       <p className="nft-description">{nft.description}</p>
       <div className="nft-details">

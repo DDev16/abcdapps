@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import '../../components/Sidebar/Sidebar.css';
+import PropTypes from 'prop-types';
+import './Sidebar.css';
 
-const Sidebar = ({ children }) => {
+const Sidebar = ({ children, sidebarClass = '', buttonClass = '' }) => {
   const [isSidebarVisible, setSidebarVisible] = useState(true);
 
   const toggleSidebar = () => {
@@ -9,18 +10,24 @@ const Sidebar = ({ children }) => {
   };
 
   return (
-    <>
-   
-      <button onClick={toggleSidebar}>
+    <div className="sidebar-container">
+      <div className={`sidebar-content ${sidebarClass}`} style={{transform: isSidebarVisible ? 'translateX(0)' : 'translateX(-100%)'}}>
+        {children}
+      </div>
+      <button 
+        onClick={toggleSidebar} 
+        className={`sidebar-button ${buttonClass}`}
+        aria-label={isSidebarVisible ? 'Hide Sidebar' : 'Show Sidebar'}>
         {isSidebarVisible ? 'Hide Sidebar' : 'Show Sidebar'}
       </button>
-      {isSidebarVisible && (
-        <div className="sidebar">
-          {children}
-        </div>
-      )}
-    </>
+    </div>
   );
+};
+
+Sidebar.propTypes = {
+  children: PropTypes.node.isRequired,
+  sidebarClass: PropTypes.string,
+  buttonClass: PropTypes.string,
 };
 
 export default Sidebar;

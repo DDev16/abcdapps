@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback} from 'react';
 import axios from 'axios';
 import TokenCard from './TokenCard.js';
 import './NFTCard.css';
@@ -48,6 +48,19 @@ const NFTList = () => {
   const [imageData, setImageData] = useState(null);
 
   const web3 = new Web3(window.ethereum);
+
+
+  const fetchTokenIds = useCallback(async (contractAddress, ownerAddress) => {
+    const nftContract = new Web3.eth.Contract(ERC721_ABI, contractAddress);
+    const balanceOf = await nftContract.methods.balanceOf(ownerAddress).call();
+    const tokenIds = [];
+    for (let i = 0; i < balanceOf; i++) {
+      const tokenId = await nftContract.methods.tokenOfOwnerByIndex(ownerAddress, i).call();
+      console.log('Fetched Token ID:', tokenId);
+      tokenIds.push(tokenId);
+    }
+    return tokenIds;
+}, []);
 
   useEffect(() => {
     // Fetch data from API
@@ -110,7 +123,7 @@ const NFTList = () => {
     };
   
     fetchData();
-  }, []);
+  }, [fetchTokenIds]);
 
   const fetchTokenTransactionHistory = async (contractAddress, address, apiUrl) => {
     const result = await axios.get(`${apiUrl}?module=account&action=tokentx&contractaddress=${contractAddress}&address=${address}`);
@@ -194,19 +207,9 @@ const NFTList = () => {
     };
 
     fetchTokenURI();
-  }, [selectedToken, nfts]);
+  }, [selectedToken, nfts, web3.eth.Contract]);
 
-  const fetchTokenIds = async (contractAddress, ownerAddress) => {
-    const nftContract = new web3.eth.Contract(ERC721_ABI, contractAddress);
-    const balanceOf = await nftContract.methods.balanceOf(ownerAddress).call();
-    const tokenIds = [];
-    for (let i = 0; i < balanceOf; i++) {
-      const tokenId = await nftContract.methods.tokenOfOwnerByIndex(ownerAddress, i).call();
-      console.log('Fetched Token ID:', tokenId);
-      tokenIds.push(tokenId);
-    }
-    return tokenIds;
-};
+  
 
 
   if (loading) {
@@ -260,7 +263,7 @@ const NFTList = () => {
         <div>
           <div>Token URI: {tokenURI}</div>
           {imageData ? (
-            <img src={`data:image/png;base64,${imageData}`} alt="Token Image" />
+            <img src={`data:image/png;base64,${imageData}`} alt="Token" />
           ) : (
             <Loading /> // Display a loading indicator while fetching image data
           )}

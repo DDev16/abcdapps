@@ -113,43 +113,44 @@ const BatchListing = () => {
 
   const handleBatchListTokens = async (event) => {
     event.preventDefault();
-
+  
     const listingFeePerToken = web3.utils.toWei('0.21', 'ether'); // Assuming a fixed listing fee per token
     const totalListingFee = web3.utils.toBN(listingFeePerToken).muln(tokenDetails.length);
-
+  
     try {
       await Promise.all(
         tokenDetails.map(async (token, index) => {
           const { contractAddress, tokenId, price, royalty } = token;
           const tokenOwner = tokenOwners[index];
-
+  
           if (!contractAddress || !tokenId || !price || !royalty) {
             console.log(`Incomplete details for token ${tokenId}`);
             return;
           }
-
+  
           if (currentAccount !== tokenOwner) {
             console.log(`You are not the owner of token ${tokenId}`);
             return;
           }
-
+  
           await approveMarketplace(contractAddress, tokenId);
-
+  
           return marketplaceContract.methods.listToken(
             contractAddress,
             tokenId,
             web3.utils.toWei(price.toString(), 'ether'),
             royalty
-          ).send({ from: currentAccount, value: listingFeePerToken });
+          ).send({ from: currentAccount, value: totalListingFee.toString() }); // Use the total listing fee here
         })
       );
-
+  
       alert('Tokens listed successfully!');
     } catch (err) {
       console.error(err);
       alert('An error occurred while listing the tokens.');
     }
   };
+  
 
   return (
     <div className="batch-listing-container">
