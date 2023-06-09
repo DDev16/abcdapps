@@ -8,8 +8,7 @@ const BatchListing = () => {
     {
       contractAddress: '',
       tokenId: '',
-      price: '',
-      royalty: ''
+      price: ''
     }
   ]);
   const [currentAccount, setCurrentAccount] = useState('');
@@ -69,7 +68,7 @@ const BatchListing = () => {
   const handleAddFields = () => {
     setTokenDetails([
       ...tokenDetails,
-      { contractAddress: '', tokenId: '', price: '', royalty: '' },
+      { contractAddress: '', tokenId: '', price: '' },
     ]);
   };
 
@@ -120,10 +119,10 @@ const BatchListing = () => {
     try {
       await Promise.all(
         tokenDetails.map(async (token, index) => {
-          const { contractAddress, tokenId, price, royalty } = token;
+          const { contractAddress, tokenId, price } = token;
           const tokenOwner = tokenOwners[index];
   
-          if (!contractAddress || !tokenId || !price || !royalty) {
+          if (!contractAddress || !tokenId || !price) {
             console.log(`Incomplete details for token ${tokenId}`);
             return;
           }
@@ -138,8 +137,7 @@ const BatchListing = () => {
           return marketplaceContract.methods.listToken(
             contractAddress,
             tokenId,
-            web3.utils.toWei(price.toString(), 'ether'),
-            royalty
+            web3.utils.toWei(price.toString(), 'ether')
           ).send({ from: currentAccount, value: totalListingFee.toString() }); // Use the total listing fee here
         })
       );
@@ -181,15 +179,6 @@ const BatchListing = () => {
                 type="text"
                 name="price"
                 value={token.price}
-                onChange={(event) => handleChange(index, event)}
-              />
-            </label>
-            <label>
-              Royalty:
-              <input
-                type="text"
-                name="royalty"
-                value={token.royalty}
                 onChange={(event) => handleChange(index, event)}
               />
             </label>

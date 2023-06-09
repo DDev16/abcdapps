@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import './Sidebar.css';
 
 const Sidebar = ({ children, sidebarClass = '', buttonClass = '' }) => {
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+  // Start with the sidebar not visible
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);

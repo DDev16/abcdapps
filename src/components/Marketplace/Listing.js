@@ -8,8 +8,7 @@ const MarketList = () => {
   const [tokenDetails, setTokenDetails] = useState({
     contractAddress: '',
     tokenId: '',
-    price: '',
-    royalty: ''
+    price: ''
   });
   const [tokenOwner, setTokenOwner] = useState('');
   const [currentAccount, setCurrentAccount] = useState('');
@@ -81,7 +80,7 @@ const MarketList = () => {
 
   const listToken = async (e) => {
     e.preventDefault();
-    const { contractAddress, tokenId, price, royalty } = tokenDetails;
+    const { contractAddress, tokenId, price } = tokenDetails;
 
     if (currentAccount !== tokenOwner) {
       alert('You are not the owner of this token.');
@@ -101,8 +100,7 @@ const MarketList = () => {
       await marketplaceContract.methods.listToken(
         contractAddress, 
         tokenId, 
-        web3.utils.toWei(price.toString(), 'ether'), 
-        royalty
+        web3.utils.toWei(price.toString(), 'ether')
       ).send({ from: currentAccount, value: listingFee });
 
       alert('Token listed successfully!');
@@ -136,15 +134,7 @@ const MarketList = () => {
         onChange={handleChange}
         required
       />
-      <input
-        name="royalty"
-        placeholder="Royalty (0-100)"
-        type="number"
-        min="0"
-        max="100"
-        onChange={handleChange}
-        required
-      />
+      
       {currentAccount && tokenOwner && currentAccount !== tokenOwner && (
         <p className="error-message">You are not the owner of this token.</p>
       )}

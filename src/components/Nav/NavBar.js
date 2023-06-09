@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { FiHome, FiPlusCircle, FiFolder } from 'react-icons/fi';
+import { FiHome, FiPlusCircle, FiFolder, FiMenu, FiX } from 'react-icons/fi';
 import { FaWallet } from 'react-icons/fa';
 import { Web3Context } from '../../utils/Web3Provider.js';
 import songbirdLogo from '../../assets/songbird-logo.png';
@@ -77,11 +77,33 @@ const NavLinks = styled.ul`
   @media (max-width: 768px) {
     flex-direction: column;
     margin-top: 10px;
+    transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
+    transition: transform 0.3s ease-in-out;
+    position: absolute;
+    background-color: #252525;
+    top: 60px;
+    left: 0;
+    padding: 2rem;
+    width: 100%;
+    height: 100vh;
 
     li {
       margin-right: 0;
       margin-bottom: 10px;
     }
+  }
+`;
+
+const MenuButton = styled.button`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 2.5rem;
+    cursor: pointer;
   }
 `;
 
@@ -125,6 +147,7 @@ const NavBar = () => {
   const [currentNetworkId, setCurrentNetworkId] = useState('');
   const [selectedNetwork, setSelectedNetwork] = useState(null);
   const [account, setAccount] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleNetworkChange = async (e) => {
     const networkId = parseInt(e.target.value, 10);
@@ -145,6 +168,14 @@ const NavBar = () => {
         console.error(error);
       }
     }
+  };
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeNav = () => {
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -178,52 +209,56 @@ const NavBar = () => {
         <img src={require('../../assets/logo.png')} alt="Logo" />
         <span className="app-name">Flare Fire Blockchain Tools</span>
       </Logo>
-      <NavLinks>
-        <li>
+      <MenuButton onClick={handleToggle}>
+        {isOpen ? <FiX /> : <FiMenu />}
+      </MenuButton>
+      <NavLinks open={isOpen}>
+        <li onClick={closeNav}>
           <Link to="/">
             <FiHome className="nav-icon" />
             Home
           </Link>
         </li>
-        <li>
+        <li onClick={closeNav}>
           <Link to="/mint">
             <FiPlusCircle className="nav-icon" />
             Mint
           </Link>
         </li>
-        <li>
+        <li onClick={closeNav}>
           <Link to="/batch-mint">
             <FiPlusCircle className="nav-icon" />
             Batch Mint
           </Link>
         </li>
-        <li>
+        <li onClick={closeNav}>
           <Link to="/my-tokens">
             <FiFolder className="nav-icon" />
             My NFTs
           </Link>
         </li>
-        <li>
+        <li onClick={closeNav}>
+          <Link to="/token-list">
+            <FaWallet className="nav-icon" />
+            Wallet
+          </Link>
+        </li>
+        <li onClick={closeNav}>
           <Link to="/marketplace">
             <FaWallet className="nav-icon" />
             Marketplace
           </Link>
         </li>
-        {account && (
-          <li>
-            <Link to="/token-list">
-              <FaWallet className="nav-icon" />
-              Connected Wallet: {account}
-            </Link>
-          </li>
-        )}
       </NavLinks>
-      <NetworkSelect value={currentNetworkId} onChange={handleNetworkChange}>
-        <option value="19">Songbird</option>
-        <option value="14">Flare</option>
-        <option value="31337">Hardhat</option>
-      </NetworkSelect>
-      {selectedNetwork && <LogoImage src={selectedNetwork} alt="Selected Network" />}
+      <div>
+        <NetworkSelect value={currentNetworkId} onChange={handleNetworkChange}>
+          <option value="14">Flare</option>
+          <option value="19">Songbird</option>
+          <option value="31337">Localhost</option>
+        </NetworkSelect>
+        {selectedNetwork && <LogoImage src={selectedNetwork} alt="Network logo" />}
+        <span>{account}</span>
+      </div>
     </StyledNav>
   );
 };
