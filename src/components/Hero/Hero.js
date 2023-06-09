@@ -43,7 +43,7 @@ const blinkCaret = keyframes`
 const Heading = styled.h1`
   font-size: 4em;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-  z-index: 1;
+  z-index: 0;
   margin-top: -50px;
   font-weight: bold;
   line-height: 1.3;
@@ -85,7 +85,7 @@ const IconWrapper = styled.div`
   margin: 20px;
   margin-bottom: 100px;
     border-radius: 50%;
-  z-index: 1;
+  z-index: 0;
   padding: 70px;
   transition: transform 0.3s ease-in-out;
   animation: ${glow} 2s infinite;

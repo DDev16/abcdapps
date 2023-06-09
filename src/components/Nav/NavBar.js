@@ -209,6 +209,15 @@ const NavBar = () => {
         <img src={require('../../assets/logo.png')} alt="Logo" />
         <span className="app-name">Flare Fire Blockchain Tools</span>
       </Logo>
+      <div>
+        <NetworkSelect value={currentNetworkId} onChange={handleNetworkChange}>
+          <option value="14">Flare</option>
+          <option value="19">Songbird</option>
+          <option value="31337">Localhost</option>
+        </NetworkSelect>
+        {selectedNetwork && <LogoImage src={selectedNetwork} alt="Network logo" />}
+        <span>{account}</span>
+      </div>
       <MenuButton onClick={handleToggle}>
         {isOpen ? <FiX /> : <FiMenu />}
       </MenuButton>
@@ -250,15 +259,7 @@ const NavBar = () => {
           </Link>
         </li>
       </NavLinks>
-      <div>
-        <NetworkSelect value={currentNetworkId} onChange={handleNetworkChange}>
-          <option value="14">Flare</option>
-          <option value="19">Songbird</option>
-          <option value="31337">Localhost</option>
-        </NetworkSelect>
-        {selectedNetwork && <LogoImage src={selectedNetwork} alt="Network logo" />}
-        <span>{account}</span>
-      </div>
+      
     </StyledNav>
   );
 };
