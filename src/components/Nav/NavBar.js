@@ -6,7 +6,6 @@ import { FaWallet } from 'react-icons/fa';
 import { Web3Context } from '../../utils/Web3Provider.js';
 import songbirdLogo from '../../assets/songbird-logo.png';
 import flareLogo from '../../assets/flarelogo.png';
-import '../../index.css';
 
 const StyledNav = styled.nav`
   position: relative;
@@ -132,6 +131,7 @@ const LogoImage = styled.img`
   height: 60px;
   margin-right: 10px;
   border-radius: 50%;
+  background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   object-fit: cover;
   transform: scale(1);
@@ -216,8 +216,9 @@ const NavBar = () => {
           <option value="31337">Localhost</option>
         </NetworkSelect>
         {selectedNetwork && <LogoImage src={selectedNetwork} alt="Network logo" />}
-        <span>{account}</span>
       </div>
+      <span>{account}</span>
+
       <MenuButton onClick={handleToggle}>
         {isOpen ? <FiX /> : <FiMenu />}
       </MenuButton>
@@ -259,7 +260,6 @@ const NavBar = () => {
           </Link>
         </li>
       </NavLinks>
-      
     </StyledNav>
   );
 };

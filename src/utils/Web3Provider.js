@@ -31,12 +31,12 @@ const Web3Provider = ({ children }) => {
 
         const networkId = await web3Instance.eth.net.getId();
         let contractAddress = '';
-        let marketplaceAddress = ''; // address for the marketplace contract
+        let marketplaceAddress = ''; 
 
         if (networkId === 19) {
           // Songbird network
-          contractAddress = '0x5AC9339a5Dc861d62E14f71eAF997d6d476d76F2';
-          marketplaceAddress = '0x03B653911eD0f2682bf761E9e2e722041fDE0AA9'; // add the Marketplace contract address for Songbird
+          contractAddress = '0x675232dCA9012A6CC77BC4688CD93366d90F436D';
+          marketplaceAddress = '0x52FAD6d2EAE7aCC84884DFaD452C1e8577521B1F'; // add the Marketplace contract address for Songbird
         } else if (networkId === 14) {
           // Flare network
           contractAddress = '0x92Dd5BF315b84F1fA0fB9865ca9130a45f99e117';

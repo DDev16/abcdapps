@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Web3Context } from '../../../utils/Web3Provider';
+import BuyToken from '../../../components/Marketplace/MarketListings/BuyToken.js'; // Import BuyToken
 import './MarketListings.css';
 import Loading from '../../Loading/Loading';
 
@@ -53,6 +54,22 @@ const MarketListings = () => {
   const [tokens, setTokens] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [failedImages, setFailedImages] = useState([]);
+  const [account, setAccount] = useState(null); // Add a state for the account
+  const [buyToken] = BuyToken(); // Use BuyToken
+
+  // Load the current account when the component mounts
+  useEffect(() => {
+    const loadAccount = async () => {
+      const accounts = await web3.eth.getAccounts();
+      if (accounts.length > 0) {
+        setAccount(accounts[0]);
+      }
+    };
+
+    if (web3) {
+      loadAccount();
+    }
+  }, [web3]);
 
   useEffect(() => {
     const fetchTokensForSale = async () => {
@@ -151,6 +168,10 @@ const MarketListings = () => {
     fetchTokensForSale();
   }, [marketplaceContract, web3]);
 
+  const onBuyClick = (contractAddress, tokenId) => {
+    buyToken(contractAddress, tokenId);
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -173,6 +194,15 @@ const MarketListings = () => {
           <p className="marketListings__tokenInfo">Price: {parseFloat(web3.utils.fromWei(token.price, 'ether')).toFixed(2)} ETH</p>
           <p className="marketListings__tokenInfo">Royalty: {token.royalty}%</p>
           <p className="marketListings__tokenInfo">Seller: {token.seller}</p>
+           {/* Only render the "Buy" button if the user is not the seller */}
+          {account && token.seller.toLowerCase() !== account.toLowerCase() && (
+            <button 
+              className="marketListings__buyButton" 
+              onClick={() => onBuyClick(token.contractAddress, token.tokenId)}
+            >
+              Buy
+            </button>
+          )}
         </div>
       ))}
     </div>
